@@ -5,10 +5,240 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SimpleCalculator"
         mc:Ignorable="d"
-        Title="Grid" Height="300" Width="600">
+        Title="Miles Calculator" Height="550" Width="550">
+    <Window.Resources>
+        <Color x:Key="coolBackground" R="121" G="173" A="207"/>
+
+
+        <Style x:Key="HelpButtonStyle" TargetType="Button">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="FontSize" Value="17"/>
+            <Setter Property="FontFamily" Value="Times New Roman"/>
+            <Setter Property="Background" Value= "CadetBlue"/>
+            <Setter Property="Foreground" Value="BlanchedAlmond"/>
+        </Style>
+        <Style x:Key="InputTextBoxstyle" TargetType="TextBox">
+            <Setter Property="FontFamily" Value="Times New Roman"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Width" Value="150"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Background" Value="BlanchedAlmond"/>
+        </Style>
+        <Style x:Key="LabelForInputBoxStyle" TargetType="Label">
+            <Setter Property="FontFamily" Value="Times New Roman"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Foreground" Value="DarkOliveGreen"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+        </Style>
+        <Style x:Key="RadioButtonStyle" TargetType="RadioButton">
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontFamily" Value="Times New Roman"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="Width" Value="80"/>
+            <Setter Property="Height" Value="20"/>
+            <Setter Property="Foreground" Value="DarkOliveGreen"/>
+        </Style>
+        <Style x:Key="CalculateButtonStyle" TargetType="Button">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="FontFamily" Value="Times New Roman"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize" Value="17"/>
+            <Setter Property="Background" Value="CadetBlue"/>
+            <Setter Property="Foreground" Value="BlanchedAlmond"/>
+            <Setter Property="Width" Value="150"/>
+            <Setter Property="Height" Value="50"/>
+        </Style>
+    </Window.Resources>
+    
     <Grid
-        Background="Aquamarine"
+        x:Name="grid_main"
+        Background="BurlyWood"
         Margin="10">
+
+        <StackPanel
+            Orientation="Vertical">
+            <Grid
+                Margin="8"
+                Height="50">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="450"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label
+                    x:Name="label_Title"
+                    Content="Runner's Calculator"
+                    HorizontalAlignment="right"
+                    FontFamily="Times New Roman"
+                    FontSize="40"
+                    Foreground="DarkOliveGreen"
+                    Width="350"/>
+                <Image 
+                    Grid.Column="1"
+                    Height="50"
+                    Width="50"
+                    HorizontalAlignment="Left" 
+                    Source="running.png"/>
+            </Grid>
+            <Grid
+                Margin="8"
+                Height="60">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="250"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="200"/>
+                </Grid.ColumnDefinitions>
+                <Label
+                    x:Name="label_Interface"
+                    HorizontalAlignment="Right"
+                    Style="{StaticResource LabelForInputBoxStyle}"
+                    Content="Choose Your User Interface:"/>
+                <ComboBox
+                        x:Name="ComboBox_InterFace"
+                        Grid.Column="1"
+                        Width="100"
+                        Height="40"
+                        HorizontalAlignment="Left"
+                        VerticalContentAlignment="Center"
+                        FontFamily="Times New Roman"
+                        FontSize="20"
+                        Foreground="DarkOliveGreen"
+                        Background="BlanchedAlmond" SelectionChanged="ComboBox_InterFace_SelectionChanged">
+                    <ComboBoxItem Content="Cool"/>
+                    <ComboBoxItem Content="Dark"/>
+                    <ComboBoxItem Content="Default"/>
+                </ComboBox>
+                <StackPanel                  
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    Orientation="Vertical"
+                    HorizontalAlignment="left" 
+                    Height="50"
+                    Width="90"
+                    Grid.RowSpan="2">
+                    <RadioButton
+                        x:Name="radioButton_Miles"
+                        Content="Miles"
+                        IsChecked="True"
+                        Style="{StaticResource RadioButtonStyle}" 
+                        Checked="RadioButton_Checked"/>
+                    <RadioButton
+                        x:Name="radioButton_Kilometers"
+                        Content="Kilometers"
+                        Style="{StaticResource RadioButtonStyle}" 
+                        Checked="RadioButton_Checked"/>
+
+                </StackPanel>
+            </Grid>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="50"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="280"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Label
+                    x:Name="label_TotalMilesGoal"
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Content="Total Miles Goal:"
+                    Style="{StaticResource LabelForInputBoxStyle}"/>
+                <Label
+                    x:Name="label_Weeks"
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Content="Weeks You Will be Running:"
+                    Style="{StaticResource LabelForInputBoxStyle}"/>
+                <Label
+                    x:Name="label_DaysOff"
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Content="Days Off per Week:"
+                    Style="{StaticResource LabelForInputBoxStyle}"/>
+                <TextBox
+                    x:Name="textBox_MileageGoal"
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    KeyUp="ValidateUserInput"
+                    Style="{StaticResource InputTextBoxstyle}"/>
+                <TextBox
+                    x:Name="textBox_Weeks" 
+                    KeyUp="ValidateUserInput"
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Style="{StaticResource InputTextBoxstyle}"/>
+                <TextBox
+                    x:Name="textBox_DaysOff" 
+                    KeyUp="ValidateUserInput"
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    Style="{StaticResource InputTextBoxstyle}"/>
+
+            </Grid>
+
+            <StackPanel
+                Orientation="Horizontal"
+                HorizontalAlignment="Center">
+                <Button
+                    Content="Miles per Day" 
+                    Click="Button_Operation_Click"
+                    x:Name="button_MilesPerDay"
+                    Style="{DynamicResource CalculateButtonStyle}"/>
+                <Button
+                    Content="Miles per Week" 
+                    Click="Button_Operation_Click"
+                    x:Name="button_MilesPerWeek"
+                    Style="{DynamicResource CalculateButtonStyle}"/>
+                <Button
+                    x:Name="button_Clear"
+                    Content="Clear" 
+                    Click="Button_Clear_Click"
+                    Style="{DynamicResource CalculateButtonStyle}"/>
+            </StackPanel>
+            <TextBox
+                Background="BurlyWood"
+                Foreground="DarkOliveGreen"
+                x:Name="textBox_Mileage"
+                FontFamily="Times New Roman"
+                FontSize="25"
+                Height="50"
+                Width="auto"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Visibility="Hidden"
+                BorderThickness="0"/>
+            <Grid
+                Height="50"
+                Width="200"
+                HorizontalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button
+                    x:Name="button_Help"
+                    Content="Help" 
+                    Click="Button_Help_Click"
+                    Grid.Column="0"
+                    Style="{StaticResource HelpButtonStyle}"/>
+                <Button
+                    x:Name="button_Exit"
+                    Content="Exit" 
+                    Click="Button_Exit_Click"
+                    Grid.Column="1"
+                    Style="{StaticResource HelpButtonStyle}"/>
+            </Grid>
+        </StackPanel>
+
 
     </Grid>
 </Window>
